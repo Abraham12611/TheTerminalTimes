@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "contentful:migrate": "contentful space migration"
+    "contentful:migrate": "contentful space migration migrations/01-initial-content-model.cjs"
   },
   "dependencies": {
     "@contentful/rich-text-react-renderer": "^16.0.0",

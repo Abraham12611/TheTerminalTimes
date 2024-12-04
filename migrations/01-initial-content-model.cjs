@@ -128,10 +128,10 @@ module.exports = function (migration) {
           'blockquote',
           'embedded-entry-block',
           'embedded-asset-block',
+          'embedded-entry-inline',
           'hyperlink',
           'entry-hyperlink',
-          'asset-hyperlink',
-          'paragraph'
+          'asset-hyperlink'
         ]
       }
     ]);

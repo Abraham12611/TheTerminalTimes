@@ -13,7 +13,7 @@ export default function Home() {
         </div>
         <div className="flex space-x-6">
           <a href="/" className="hover:text-green-500">Home</a>
-          <a href="/distros" className="hover:text-green-500">Distros</a>
+          <a href="/distro-reviews" className="hover:text-green-500">Distros</a>
           <a href="/tutorials" className="hover:text-green-500">Tutorials</a>
           <a href="/about" className="hover:text-green-500">About</a>
         </div>

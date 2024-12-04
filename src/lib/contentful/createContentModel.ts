@@ -50,7 +50,7 @@ async function createContentModel() {
 
     // Create Author Content Type
     const authorContentType = await environment.createContentTypeWithId('author', {
-      name: 'Author',
+      name: 'Author-name',
       description: 'Authors who contribute to the blog',
       displayField: 'name',
       fields: [

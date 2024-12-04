@@ -7,8 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "contentful:create-model": "NODE_OPTIONS='--experimental-specifier-resolution=node' ts-node --esm scripts/createContentModel.ts",
-    "create-content-model": "NODE_OPTIONS='--experimental-specifier-resolution=node' ts-node --esm scripts/createContentModel.ts"
+    "contentful:migrate": "contentful space migration"
   },
   "dependencies": {
     "@contentful/rich-text-react-renderer": "^16.0.0",

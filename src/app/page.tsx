@@ -1,46 +1,134 @@
 import React from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Header */}
-      <header className="bg-gray-900 text-white py-6">
-        <div className="container mx-auto px-4">
-          <h1 className="text-4xl font-bold">The Terminal Times</h1>
-          <p className="mt-2 text-gray-300">Your Tech Blog for the Digital Age</p>
-        </div>
+    <div className="min-h-screen flex flex-col bg-[#0f1219]">
+      {/* Header/Navigation */}
+      <header className="border-b border-gray-800">
+        <nav className="container py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <span className="text-green-500 text-2xl">$_</span>
+              <Link href="/" className="text-xl font-bold text-white">
+                TheTerminalTimes
+              </Link>
+            </div>
+            <div className="flex space-x-8">
+              <Link href="/" className="nav-link">Home</Link>
+              <Link href="/distros" className="nav-link">Distros</Link>
+              <Link href="/tutorials" className="nav-link">Tutorials</Link>
+              <Link href="/about" className="nav-link">About</Link>
+            </div>
+          </div>
+        </nav>
       </header>
 
-      {/* Main Content */}
-      <main className="flex-grow container mx-auto px-4 py-12">
-        <section className="mb-12">
-          <h2 className="text-3xl font-bold mb-6">Latest Articles</h2>
+      {/* Hero Section */}
+      <section className="py-20 text-center bg-[#0f1219]">
+        <div className="container">
+          <h1 className="text-5xl font-bold mb-6">
+            Explore the World of Linux
+          </h1>
+          <p className="text-xl text-gray-400 mb-8">
+            Discover distributions, tips, and tutorials
+          </p>
+          <Link href="/distros" className="btn-primary">
+            Explore Distros
+          </Link>
+        </div>
+      </section>
+
+      {/* Featured Posts */}
+      <section className="py-16 bg-[#0f1219]">
+        <div className="container">
+          <h2 className="text-3xl font-bold mb-8">Featured Posts</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Placeholder Card */}
-            <article className="bg-white rounded-lg shadow-lg overflow-hidden">
-              <div className="bg-gray-200 h-48"></div>
+            {/* Featured Post Card */}
+            <article className="card">
+              <div className="aspect-video bg-gray-800 relative"></div>
               <div className="p-6">
-                <h3 className="text-xl font-bold mb-2">Coming Soon</h3>
-                <p className="text-gray-600 mb-4">
-                  Stay tuned for exciting articles about technology, development, and more!
+                <div className="category-tag mb-2">Tutorials</div>
+                <h3 className="text-xl font-bold mb-2">
+                  Getting Started with Ubuntu 22.04
+                </h3>
+                <p className="text-gray-400 mb-4">
+                  Learn how to install and set up Ubuntu 22.04, the latest LTS release.
                 </p>
-                <div className="flex items-center text-sm text-gray-500">
-                  <span>Coming Soon</span>
-                </div>
+              </div>
+            </article>
+
+            {/* Additional Featured Post Cards */}
+            <article className="card">
+              <div className="aspect-video bg-gray-800 relative"></div>
+              <div className="p-6">
+                <div className="category-tag mb-2">Comparisons</div>
+                <h3 className="text-xl font-bold mb-2">
+                  Arch Linux vs Manjaro: Which One Is Right for You?
+                </h3>
+                <p className="text-gray-400 mb-4">
+                  Compare two popular rolling release distributions and find out which suits your needs.
+                </p>
+              </div>
+            </article>
+
+            <article className="card">
+              <div className="aspect-video bg-gray-800 relative"></div>
+              <div className="p-6">
+                <div className="category-tag mb-2">Tips & Tricks</div>
+                <h3 className="text-xl font-bold mb-2">
+                  Top 10 Linux Commands Every User Should Know
+                </h3>
+                <p className="text-gray-400 mb-4">
+                  Master these essential command-line tools to boost your productivity.
+                </p>
               </div>
             </article>
           </div>
-        </section>
-      </main>
+        </div>
+      </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-8">
-        <div className="container mx-auto px-4">
-          <div className="text-center">
-            <p>&copy; 2024 The Terminal Times. All rights reserved.</p>
+      {/* Categories Section */}
+      <section className="py-16 bg-[#0f1219]">
+        <div className="container">
+          <div className="flex justify-between items-start">
+            <div className="w-3/4">
+              <h2 className="text-3xl font-bold mb-8">Categories</h2>
+              <div className="grid grid-cols-2 gap-4">
+                <Link href="/tutorials" className="card p-4 hover:bg-[#242938]">
+                  <h3 className="text-xl font-bold">Tutorials</h3>
+                </Link>
+                <Link href="/distro-reviews" className="card p-4 hover:bg-[#242938]">
+                  <h3 className="text-xl font-bold">Distro Reviews</h3>
+                </Link>
+                <Link href="/tips-tricks" className="card p-4 hover:bg-[#242938]">
+                  <h3 className="text-xl font-bold">Tips & Tricks</h3>
+                </Link>
+                <Link href="/news" className="card p-4 hover:bg-[#242938]">
+                  <h3 className="text-xl font-bold">News</h3>
+                </Link>
+              </div>
+            </div>
+
+            {/* Popular Posts Sidebar */}
+            <div className="w-1/4 pl-8">
+              <h2 className="text-xl font-bold mb-4">Popular Posts</h2>
+              <div className="space-y-4">
+                <Link href="/post/1" className="block text-gray-400 hover:text-white">
+                  How to Customize Your Linux Desktop
+                </Link>
+                <Link href="/post/2" className="block text-gray-400 hover:text-white">
+                  Understanding Linux File Permissions
+                </Link>
+                <Link href="/post/3" className="block text-gray-400 hover:text-white">
+                  The Best Linux Distros for Beginners in 2023
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
-      </footer>
+      </section>
     </div>
   );
 } 

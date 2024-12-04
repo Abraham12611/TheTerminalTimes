@@ -3,13 +3,46 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 0, 0, 0;
+  --accent-color: #22c55e;
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: white;
-  min-height: 100vh;
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+@layer base {
+  body {
+    @apply antialiased;
+  }
+}
+
+@layer components {
+  .container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .nav-link {
+    @apply text-gray-300 hover:text-white transition-colors;
+  }
+
+  .card {
+    @apply bg-[#1a1f2e] rounded-lg overflow-hidden border border-gray-800 hover:border-green-500 transition-colors;
+  }
+
+  .category-tag {
+    @apply text-green-500 text-sm font-medium;
+  }
+
+  .btn-primary {
+    @apply bg-green-500 text-white px-6 py-2 rounded-full hover:bg-green-600 transition-colors;
+  }
 } 

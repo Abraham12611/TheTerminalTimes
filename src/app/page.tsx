@@ -2,9 +2,11 @@ import React from 'react';
 
 export default function Home() {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-8">The Terminal Times</h1>
-      <p className="text-lg">Welcome to our tech blog. Content coming soon!</p>
-    </div>
+    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm">
+        <h1 className="text-4xl font-bold">The Terminal Times</h1>
+        <p className="mt-4">Welcome to our tech blog!</p>
+      </div>
+    </main>
   );
 } 

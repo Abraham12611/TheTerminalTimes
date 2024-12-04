@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "contentful:create-model": "NODE_OPTIONS='--experimental-specifier-resolution=node' ts-node --esm scripts/createContentModel.ts",
+    "create-content-model": "NODE_OPTIONS='--experimental-specifier-resolution=node' ts-node --esm scripts/createContentModel.ts"
   },
   "dependencies": {
     "@contentful/rich-text-react-renderer": "^16.0.0",
@@ -38,10 +40,14 @@
     "@types/react-dom": "^18.3.1",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
+    "contentful-management": "^11.40.1",
+    "dotenv": "^16.4.7",
     "eslint": "^8",
     "eslint-config-next": "14.2.16",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
-  }
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
+  },
+  "type": "module"
 }

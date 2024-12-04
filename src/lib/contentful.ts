@@ -1,59 +1,70 @@
-import { createClient, Entry, EntryCollection } from 'contentful';
-import { Document } from '@contentful/rich-text-types';
-
-export type Author = {
-  name: string;
-  picture: {
-    url: string;
-  };
-};
-
-export interface PostFields {
-  title: string;
-  slug: string;
-  excerpt: string;
-  content: Document;
-  coverImage: {
-    url: string;
-  };
-  author: Author;
-  date: string;
-  category: string;
-}
-
-export type Post = Entry<PostFields>;
+import { createClient } from 'contentful';
 
 export const client = createClient({
   space: process.env.CONTENTFUL_SPACE_ID!,
   accessToken: process.env.CONTENTFUL_ACCESS_TOKEN!,
 });
 
-export async function getPostBySlug(slug: string): Promise<Post | undefined> {
-  const response = await client.getEntries<PostFields>({
-    content_type: 'post',
-    'fields.slug': slug,
-    include: 2,
-  });
-
-  return response.items[0];
+export interface Author {
+  name: string;
+  bio?: string;
+  email?: string;
+  profilePicture?: {
+    fields: {
+      file: {
+        url: string;
+      };
+    };
+  };
 }
 
-export async function getAllPosts(): Promise<Post[]> {
-  const response = await client.getEntries<PostFields>({
-    content_type: 'post',
-    order: ['-fields.date'],
-    include: 2,
+export interface BlogPost {
+  sys: {
+    id: string;
+  };
+  fields: {
+    title: string;
+    slug: string;
+    description?: string;
+    content: any; // Using 'any' for now, but you might want to type this properly
+    publishDate: string;
+    author: {
+      fields: Author;
+    };
+    categories: Array<{
+      fields: {
+        name: string;
+        slug: string;
+      };
+    }>;
+    featuredImage?: {
+      fields: {
+        file: {
+          url: string;
+        };
+      };
+    };
+    seoMetadata?: any;
+  };
+}
+
+export async function getBlogPosts() {
+  const response = await client.getEntries<BlogPost>({
+    content_type: 'blogPost',
+    include: 2, // Include linked entries (author and categories)
+    order: '-fields.publishDate', // Sort by publish date descending
   });
 
   return response.items;
 }
 
-export async function getPostsByCategory(category: string): Promise<Post[]> {
-  const response = await client.getEntries<PostFields>({
-    content_type: 'post',
-    'fields.category': category,
-    order: ['-fields.date'],
+export async function getBlogPostsByCategory(categorySlug: string) {
+  const response = await client.getEntries<BlogPost>({
+    content_type: 'blogPost',
     include: 2,
+    'fields.categories.sys.contentType.sys.id': 'category',
+    'fields.categories.fields.slug': categorySlug,
+    order: '-fields.publishDate',
   });
 
   return response.items;

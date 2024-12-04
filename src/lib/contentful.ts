@@ -2,23 +2,47 @@ import { createClient } from 'contentful';
 import { Document } from '@contentful/rich-text-types';
 
 export type Author = {
-  name: string;
-  picture: {
-    url: string;
-  };
+  fields: {
+    name: string;
+    bio?: string;
+    profilePicture?: {
+      fields: {
+        file: {
+          url: string;
+        }
+      }
+    };
+    email?: string;
+  }
 };
 
-export interface PostFields {
+export interface Category {
+  fields: {
+    name: string;
+    slug: string;
+  }
+}
+
+export interface BlogPostFields {
   title: string;
   slug: string;
-  excerpt: string;
+  description?: string;
   content: Document;
-  coverImage: {
-    url: string;
+  publishDate: string;
+  author: {
+    fields: Author['fields']
   };
-  author: Author;
-  date: string;
-  category: string;
+  categories: {
+    fields: Category['fields']
+  }[];
+  featuredImage?: {
+    fields: {
+      file: {
+        url: string;
+      }
+    }
+  };
+  seoMetadata?: object;
 }
 
 const client = createClient({
@@ -27,21 +51,22 @@ const client = createClient({
   environment: process.env.CONTENTFUL_ENVIRONMENT || 'master',
 });
 
-export async function getBlogPostsByCategory(category: string) {
-  const response = await client.getEntries({
+export async function getBlogPostsByCategory(categorySlug: string) {
+  const response = await client.getEntries<BlogPostFields>({
     content_type: 'blogPost',
-    'fields.category': category,
-    order: ['-fields.date'],
+    'fields.categories.sys.contentType.sys.id': 'category',
+    'fields.categories.fields.slug[in]': categorySlug,
     include: 2,
+    order: ['-fields.publishDate'],
   });
 
   return response.items;
 }
 
 export async function getAllPosts() {
-  const response = await client.getEntries({
-    content_type: 'post',
-    order: ['-fields.date'],
+  const response = await client.getEntries<BlogPostFields>({
+    content_type: 'blogPost',
+    order: ['-fields.publishDate'],
     include: 2,
   });
 
@@ -49,10 +74,9 @@ export async function getAllPosts() {
 }
 
 export async function getPostBySlug(slug: string) {
-  const response = await client.getEntries({
-    content_type: 'post',
+  const response = await client.getEntries<BlogPostFields>({
+    content_type: 'blogPost',
     'fields.slug': slug,
-    limit: 1,
     include: 2,
   });
 

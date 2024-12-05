@@ -26,7 +26,7 @@ interface BlogPost extends EntrySkeletonType {
 export default async function DistroReviews() {
   const response = await client.getEntries<BlogPost>({
     content_type: 'blogPost',
-    'fields.categories.sys.id[in]': 'distroReviews',
+    'fields.categories.sys.id[in]': 'distro-reviews',
     order: ['-fields.publishDate'],
     include: 2
   });

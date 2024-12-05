@@ -66,7 +66,7 @@ export default function SearchDialog({
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-start justify-center pt-20">
       <div className="bg-gray-900 w-full max-w-2xl rounded-lg shadow-lg border border-gray-800">
-        {/* Search Header */}
+        {/* Search Headers */}
         <div className="p-4 border-b border-gray-800 flex items-center">
           <Search className="w-5 h-5 text-gray-400 mr-3" />
           <input

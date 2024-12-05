@@ -5,21 +5,21 @@ import Link from 'next/link';
 import { format } from 'date-fns';
 
 export const metadata = {
-  title: 'Linux Distribution Reviews | The Terminal Times',
-  description: 'Comprehensive reviews of Linux distributions to help you choose the right one for your needs.',
+  title: 'Linux Tips & Tricks | The Terminal Times',
+  description: 'Discover useful Linux tips and tricks to enhance your productivity and system performance.',
 };
 
-export default async function DistroReviewsPage() {
+export default async function TipsAndTricksPage() {
   const posts = await getBlogPostsByCategory('distro-reviews');
 
   return (
     <div className="text-white">
-      <h1 className="text-4xl font-bold mb-8">Linux Distribution Reviews</h1>
+      <h1 className="text-4xl font-bold mb-8">Linux Distro Reviews</h1>
       
-      {/* Featured Review - First Post */}
+      {/* Featured Tip - First Post */}
       {posts.length > 0 && (
         <div className="bg-gray-900 rounded-lg p-8 mb-12 border border-gray-800">
-          <span className="text-green-500 text-sm">Latest Review</span>
+          <span className="text-green-500 text-sm">Featured Tip</span>
           <h2 className="text-2xl font-bold mt-2 mb-4">{posts[0].fields.title}</h2>
           <p className="text-gray-400 mb-6">{posts[0].fields.excerpt}</p>
           <Link 
@@ -31,7 +31,7 @@ export default async function DistroReviewsPage() {
         </div>
       )}
       
-      {/* Reviews Grid - Remaining Posts */}
+      {/* Tips Grid - Remaining Posts */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {posts.slice(1).map((post) => (
           <div key={post.sys.id} className="bg-gray-900 rounded-lg p-6 border border-gray-800">
@@ -45,7 +45,7 @@ export default async function DistroReviewsPage() {
                 />
               </div>
             )}
-            <span className="text-green-500 text-sm">Distribution Review</span>
+            <span className="text-green-500 text-sm">Distro Review</span>
             <h3 className="text-xl font-bold mt-2 mb-2">{post.fields.title}</h3>
             <p className="text-gray-400 mb-4">{post.fields.excerpt}</p>
             <div className="flex justify-between items-center">
@@ -53,7 +53,7 @@ export default async function DistroReviewsPage() {
                 href={`/posts/${post.fields.slug}`}
                 className="text-green-500 hover:text-green-400"
               >
-                Read More →
+                Read Review →
               </Link>
               <span className="text-sm text-gray-500">
                 {format(new Date(post.fields.publishDate), 'MMM d, yyyy')}

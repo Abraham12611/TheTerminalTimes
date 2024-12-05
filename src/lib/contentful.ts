@@ -40,14 +40,10 @@ export interface BlogPostFields {
 }
 
 // Create client as a constant that can be imported
-const client = createClient({
+export const client = createClient({
   space: process.env.CONTENTFUL_SPACE_ID!,
   accessToken: process.env.CONTENTFUL_ACCESS_TOKEN!,
-  environment: process.env.CONTENTFUL_ENVIRONMENT || 'master',
 });
-
-// Export client for use in generateStaticParams
-export { client };
 
 export async function getBlogPostsByCategory(categorySlug: string) {
   try {

@@ -3,7 +3,8 @@ import { client } from '@/lib/contentful';
 import { format } from 'date-fns';
 import { Entry, EntrySkeletonType } from 'contentful';
 
-interface Category {
+interface Category extends EntrySkeletonType {
+  contentTypeId: 'category';
   fields: {
     name: string;
     slug: string;
@@ -18,15 +19,15 @@ interface BlogPost extends EntrySkeletonType {
     excerpt?: string;
     publishDate: string;
     content: any;
-    category: Entry<Category>;
+    categories: Entry<Category>[];
   };
 }
 
 export default async function DistroReviews() {
   const response = await client.getEntries<BlogPost>({
     content_type: 'blogPost',
-    'fields.category.sys.id': 'distroReviews',
-    order: '-fields.publishDate',
+    'fields.categories.sys.id[in]': 'distroReviews',
+    order: ['-fields.publishDate'],
     include: 2
   });
 

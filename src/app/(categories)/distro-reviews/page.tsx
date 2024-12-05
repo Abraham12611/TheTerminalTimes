@@ -1,25 +1,33 @@
 import Link from 'next/link';
 import { client } from '@/lib/contentful';
 import { format } from 'date-fns';
-import { Entry } from 'contentful';
+import { Entry, EntrySkeletonType } from 'contentful';
 
-// Define the shape of your blog post
-interface BlogPost {
+interface Category {
+  fields: {
+    name: string;
+    slug: string;
+  };
+}
+
+interface BlogPost extends EntrySkeletonType {
+  contentTypeId: 'blogPost';
   fields: {
     title: string;
     slug: string;
     excerpt?: string;
     publishDate: string;
     content: any;
+    categories: Entry<Category>[];
   };
 }
 
 export default async function DistroReviews() {
   const response = await client.getEntries<BlogPost>({
     content_type: 'blogPost',
-    'fields.categories.sys.contentType.sys.id': 'category',
-    'fields.categories.fields.slug': 'distro-reviews',
+    'metadata.tags.sys.id[in]': 'distro-reviews',
     order: '-fields.publishDate',
+    include: 2
   });
 
   const posts = response.items;

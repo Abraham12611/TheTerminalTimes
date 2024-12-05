@@ -18,14 +18,14 @@ interface BlogPost extends EntrySkeletonType {
     excerpt?: string;
     publishDate: string;
     content: any;
-    categories: Entry<Category>[];
+    category: Entry<Category>;
   };
 }
 
 export default async function DistroReviews() {
   const response = await client.getEntries<BlogPost>({
     content_type: 'blogPost',
-    'metadata.tags.sys.id[in]': 'distro-reviews',
+    'fields.category.sys.id': 'distroReviews',
     order: '-fields.publishDate',
     include: 2
   });
@@ -50,7 +50,7 @@ export default async function DistroReviews() {
         </div>
       )}
 
-      <div className="grid md:grid-cols-2 gap-8">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {posts.slice(1).map((post) => (
           <Link 
             key={post.fields.slug}

@@ -6,10 +6,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'images.ctfassets.net',
         port: '',
-        pathname: '/vg7snmqkoio2/**',
-      },
-    ],
-  },
-};
+        pathname: '/**'
+      }
+    ]
+  }
+}
 
-module.exports = nextConfig; 
+module.exports = nextConfig

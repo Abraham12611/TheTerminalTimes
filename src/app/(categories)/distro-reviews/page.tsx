@@ -1,69 +1,65 @@
+import React from 'react';
+import { getBlogPostsByCategory } from '@/lib/contentful';
+import Image from 'next/image';
 import Link from 'next/link';
-import { client } from '@/lib/contentful';
 import { format } from 'date-fns';
-import { Entry, EntrySkeletonType } from 'contentful';
 
-interface Category extends EntrySkeletonType {
-  contentTypeId: 'category';
-  fields: {
-    name: string;
-    slug: string;
-  };
-}
+export const metadata = {
+  title: 'Linux Tips & Tricks | The Terminal Times',
+  description: 'Discover useful Linux tips and tricks to enhance your productivity and system performance.',
+};
 
-interface BlogPost extends EntrySkeletonType {
-  contentTypeId: 'blogPost';
-  fields: {
-    title: string;
-    slug: string;
-    excerpt?: string;
-    publishDate: string;
-    content: any;
-    categories: Entry<Category>[];
-  };
-}
-
-export default async function DistroReviews() {
-  const response = await client.getEntries<BlogPost>({
-    content_type: 'blogPost',
-    'fields.categories.sys.id[in]': 'distro-reviews',
-    order: ['-fields.publishDate'],
-    include: 2
-  });
-
-  const posts = response.items;
+export default async function TipsAndTricksPage() {
+  const posts = await getBlogPostsByCategory('distro-reviews');
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
-      <h1 className="text-4xl font-bold text-white mb-8">Linux Distro Reviews</h1>
+    <div className="text-white">
+      <h1 className="text-4xl font-bold mb-8">Linux Distro Reviews</h1>
       
+      {/* Featured Tip - First Post */}
       {posts.length > 0 && (
         <div className="bg-gray-900 rounded-lg p-8 mb-12 border border-gray-800">
-          <span className="text-green-500 text-sm">Latest Review</span>
+          <span className="text-green-500 text-sm">Featured Tip</span>
           <h2 className="text-2xl font-bold mt-2 mb-4">{posts[0].fields.title}</h2>
           <p className="text-gray-400 mb-6">{posts[0].fields.excerpt}</p>
           <Link 
             href={`/posts/${posts[0].fields.slug}`}
-            className="inline-block bg-green-500 text-white px-6 py-2 rounded-full hover:bg-green-600 transition-colors"
+            className="bg-green-500 text-white px-6 py-2 rounded-full hover:bg-green-600 transition-colors inline-block"
           >
             Read Review
           </Link>
         </div>
       )}
-
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      
+      {/* Tips Grid - Remaining Posts */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {posts.slice(1).map((post) => (
-          <Link 
-            key={post.fields.slug}
-            href={`/posts/${post.fields.slug}`}
-            className="block bg-gray-900 rounded-lg p-6 border border-gray-800 hover:border-green-500 transition-colors"
-          >
-            <h2 className="text-xl font-bold text-white mb-2">{post.fields.title}</h2>
+          <div key={post.sys.id} className="bg-gray-900 rounded-lg p-6 border border-gray-800">
+            {post.fields.featuredImage && (
+              <div className="relative w-full h-48 mb-4">
+                <Image
+                  src={`https:${post.fields.featuredImage.fields.file.url}`}
+                  alt={post.fields.title}
+                  fill
+                  className="rounded-lg object-cover"
+                />
+              </div>
+            )}
+            <span className="text-green-500 text-sm">Distro Review</span>
+            <h3 className="text-xl font-bold mt-2 mb-2">{post.fields.title}</h3>
             <p className="text-gray-400 mb-4">{post.fields.excerpt}</p>
-            <time className="text-sm text-gray-500">
-              {format(new Date(post.fields.publishDate), 'MMMM d, yyyy')}
-            </time>
-          </Link>
+            <div className="flex justify-between items-center">
+              <Link 
+                href={`/posts/${post.fields.slug}`}
+                className="text-green-500 hover:text-green-400"
+              >
+                Read Review →
+              </Link>
+              <span className="text-sm text-gray-500">
+                {format(new Date(post.fields.publishDate), 'MMM d, yyyy')}
+              </span>
+            </div>
+          </div>
         ))}
       </div>
     </div>

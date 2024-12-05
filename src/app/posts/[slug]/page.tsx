@@ -2,7 +2,7 @@ import { client } from '@/lib/contentful';
 import { format } from 'date-fns';
 import Image from 'next/image';
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
-import { BLOCKS, INLINES } from '@contentful/rich-text-types';
+import { BLOCKS } from '@contentful/rich-text-types';
 import { Entry, Asset } from 'contentful';
 
 // Define interfaces for your content types
@@ -47,38 +47,36 @@ export default async function BlogPost({ params }: { params: { slug: string } })
     return <div>Post not found</div>;
   }
 
-  const options = {
-    renderNode: {
-      [BLOCKS.EMBEDDED_ASSET]: (node: any) => {
-        // Add null checks for embedded assets
-        const { target } = node.data;
-        if (!target || !target.fields) return null;
-        
-        const { file, title } = target.fields;
-        if (!file || !file.details || !file.details.image) return null;
+  interface RichTextContent {
+    nodeType: string;
+    content: RichTextContent[];
+    value?: string;
+    data?: {
+      uri?: string;
+      target?: {
+        sys: {
+          id: string;
+          type: string;
+        };
+      };
+    };
+  }
 
-        return (
-          <div className="my-8">
-            <Image
-              src={`https:${file.url}`}
-              width={file.details.image.width}
-              height={file.details.image.height}
-              alt={title || 'Blog image'}
-              className="rounded-lg"
-            />
-          </div>
-        );
-      },
-      [BLOCKS.PARAGRAPH]: (node: any, children: any) => (
-        <p className="mb-4 text-gray-300">{children}</p>
+  const renderOptions = {
+    renderNode: {
+      [BLOCKS.PARAGRAPH]: (node: RichTextContent) => (
+        <p className="mb-4">{node.content[0].value}</p>
       ),
-      [BLOCKS.HEADING_1]: (node: any, children: any) => (
-        <h1 className="text-4xl font-bold mb-6">{children}</h1>
+      [BLOCKS.HEADING_1]: (node: RichTextContent) => (
+        <h1 className="text-3xl font-bold mb-4">{node.content[0].value}</h1>
       ),
-      [BLOCKS.HEADING_2]: (node: any, children: any) => (
-        <h2 className="text-3xl font-bold mb-4">{children}</h2>
+      [BLOCKS.HEADING_2]: (node: RichTextContent) => (
+        <h2 className="text-2xl font-bold mb-3">{node.content[0].value}</h2>
       ),
-    },
+      [BLOCKS.HEADING_3]: (node: RichTextContent) => (
+        <h3 className="text-xl font-bold mb-2">{node.content[0].value}</h3>
+      ),
+    }
   };
 
   return (
@@ -115,7 +113,7 @@ export default async function BlogPost({ params }: { params: { slug: string } })
       )}
       
       <div className="prose prose-invert max-w-none">
-        {documentToReactComponents(post.fields.content, options)}
+        {documentToReactComponents(post.fields.content, renderOptions)}
       </div>
     </div>
   );

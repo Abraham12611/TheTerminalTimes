@@ -10,7 +10,7 @@ export const metadata = {
 };
 
 export default async function TipsAndTricksPage() {
-  const posts = await getBlogPostsByCategory('tips-tricks');
+  const posts = await getBlogPostsByCategory('tips-and-tricks');
 
   return (
     <div className="text-white">

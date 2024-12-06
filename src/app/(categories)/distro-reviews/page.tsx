@@ -15,6 +15,15 @@ export const dynamic = 'force-dynamic';
 
 export default async function DistroReviewsPage() {
   const posts = await getBlogPostsByCategory('distro-reviews');
+  
+  // Debug output
+  console.log('Page received posts:', {
+    total: posts.length,
+    posts: posts.map(p => ({
+      title: p.fields.title,
+      categories: p.fields.categories?.map(c => c.fields.slug)
+    }))
+  });
 
   if (!posts || posts.length === 0) {
     return (

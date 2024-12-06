@@ -17,7 +17,12 @@ export async function GET(request: Request) {
     posts: posts.map(post => ({
       id: post.sys.id,
       title: post.fields.title,
-      categories: post.fields.categories?.map(cat => cat.fields.slug)
+      slug: post.fields.slug,
+      categories: post.fields.categories?.map(cat => ({
+        id: cat.sys.id,
+        slug: cat.fields.slug,
+        name: cat.fields.name
+      }))
     }))
   });
 } 

@@ -17,11 +17,11 @@ export default async function DistroReviewsPage() {
   const posts = await getBlogPostsByCategory('distro-reviews');
   
   // Debug output
-  console.log('Page received posts:', {
+  console.log('Distro Reviews Page - Received posts:', {
     total: posts.length,
     posts: posts.map(p => ({
       title: p.fields.title,
-      categories: p.fields.categories?.map(c => c.fields.slug)
+      categorySlugs: p.fields.categories?.map(c => c.fields.slug)
     }))
   });
 

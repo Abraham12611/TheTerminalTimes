@@ -38,9 +38,8 @@ export async function getBlogPostsByCategory(categorySlug: string): Promise<Blog
     
     const response = await client.getEntries<BlogPostFields>({
       content_type: 'blogPost',
-      // Link to categories with matching slug
-      links_to_entry: categorySlug,
-      'fields.categories.sys.contentType.sys.id': 'category',
+      // Query for entries that have a matching category slug
+      'fields.categories.fields.slug': categorySlug,
       order: ['-sys.createdAt'],
       include: 2,
     });
@@ -52,19 +51,7 @@ export async function getBlogPostsByCategory(categorySlug: string): Promise<Blog
       categorySlug
     });
 
-    // Filter posts to ensure they belong to the correct category
-    const filteredPosts = response.items.filter(post => 
-      post.fields.categories?.some(category => 
-        category.fields.slug === categorySlug
-      )
-    );
-
-    console.log('Filtered posts:', {
-      total: filteredPosts.length,
-      firstPost: filteredPosts[0]?.fields.title
-    });
-
-    return filteredPosts;
+    return response.items;
   } catch (error) {
     console.error('Error fetching posts by category:', error);
     return [];

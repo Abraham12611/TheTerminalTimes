@@ -15,7 +15,7 @@ function shuffleArray<T>(array: T[]): T[] {
 export default async function Home() {
   const allPosts = await getAllPosts();
   const shuffledPosts = shuffleArray(allPosts);
-  const featuredPosts = shuffledPosts.slice(0, 3); // Get 3 random posts
+  const featuredPosts = shuffledPosts.slice(0, 8); // Get 8 random post
 
   return (
     <div className="min-h-screen bg-black">

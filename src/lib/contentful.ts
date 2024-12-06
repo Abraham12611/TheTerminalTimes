@@ -36,19 +36,33 @@ export async function getBlogPostsByCategory(categorySlug: string): Promise<Blog
   try {
     console.log('Fetching posts for category:', categorySlug);
     
+    // First, get the category entry
+    const categoryResponse = await client.getEntries<BlogPostFields>({
+      content_type: 'category',
+      'fields.slug': categorySlug,
+      limit: 1
+    });
+
+    const categoryId = categoryResponse.items[0]?.sys.id;
+    
+    if (!categoryId) {
+      console.warn(`Category not found for slug: ${categorySlug}`);
+      return [];
+    }
+
+    // Then get all posts linked to this category
     const response = await client.getEntries<BlogPostFields>({
       content_type: 'blogPost',
-      // Query for entries that have a matching category slug
-      'fields.categories.fields.slug': categorySlug,
+      'fields.categories.sys.id': categoryId,
       order: ['-sys.createdAt'],
       include: 2,
     });
 
     console.log('Response:', {
+      categoryId,
       total: response.total,
       items: response.items.length,
-      firstPost: response.items[0]?.fields.title,
-      categorySlug
+      firstPost: response.items[0]?.fields.title
     });
 
     return response.items;

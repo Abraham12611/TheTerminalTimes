@@ -19,13 +19,8 @@ async function createContentModel() {
         {
           id: 'name',
           name: 'Name',
-          type: 'Text',
-          required: true,
-          validations: [
-            {
-              unique: true
-            }
-          ]
+          type: 'Symbol',
+          required: true
         },
         {
           id: 'slug',
@@ -35,13 +30,6 @@ async function createContentModel() {
           validations: [
             {
               unique: true
-            },
-            {
-              regexp: {
-                pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$',
-                flags: null
-              },
-              message: 'Slug must be URL friendly. Use only lowercase letters, numbers, and hyphens.'
             }
           ]
         }

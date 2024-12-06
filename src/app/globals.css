@@ -42,4 +42,35 @@
   .container {
     @apply max-w-7xl mx-auto px-4;
   }
+}
+
+/* Selection styles */
+::selection {
+  background: #22c55e; /* emerald-500 */
+  color: #000000;
+}
+
+::-moz-selection {
+  background: #22c55e; /* emerald-500 */
+  color: #000000;
+}
+
+/* Link styles */
+.prose a {
+  color: #34d399 !important; /* emerald-400 */
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.prose a:hover {
+  color: #6ee7b7 !important; /* emerald-300 */
+}
+
+/* Social share buttons hover effects */
+.social-share-btn {
+  transition: transform 0.2s ease;
+}
+
+.social-share-btn:hover {
+  transform: translateY(-2px);
 } 

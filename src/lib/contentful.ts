@@ -1,25 +1,13 @@
 import { createClient } from 'contentful';
-import { Document } from '@contentful/rich-text-types';
+import type { Entry, EntryCollection } from 'contentful';
 
-// Define interfaces for your content types
-export interface Author {
-  fields: {
-    name: string;
-    profilePicture?: {
-      fields: {
-        file: {
-          url: string;
-        }
-      }
-    };
-  }
-}
-
-export interface BlogPostFields {
+// Define the content type for blog posts
+interface BlogPostFields {
   title: string;
   slug: string;
   excerpt?: string;
-  content: Document;
+  content: any;
+  publishDate: string;
   featuredImage?: {
     fields: {
       file: {
@@ -27,55 +15,64 @@ export interface BlogPostFields {
       }
     }
   };
-  author: {
-    fields: Author['fields']
-  };
-  publishDate: string;
-  categories: {
+  categories: Array<{
+    sys: { id: string };
     fields: {
       name: string;
       slug: string;
     }
-  }[];
+  }>;
 }
 
-// Create client as a constant that can be imported
+export type BlogPost = Entry<BlogPostFields>;
+
 export const client = createClient({
   space: process.env.CONTENTFUL_SPACE_ID!,
   accessToken: process.env.CONTENTFUL_ACCESS_TOKEN!,
+  environment: process.env.CONTENTFUL_ENVIRONMENT || 'master',
 });
 
-export async function getBlogPostsByCategory(categorySlug: string) {
+export async function getBlogPostsByCategory(categorySlug: string): Promise<BlogPost[]> {
   try {
+    console.log('Fetching posts for category:', categorySlug);
+    
     // First, get the category entry
-    const categoryResponse = await client.getEntries({
+    const categoryResponse = await client.getEntries<BlogPostFields>({
       content_type: 'category',
       'fields.slug': categorySlug,
       limit: 1
     });
 
-    if (!categoryResponse.items.length) {
+    const categoryId = categoryResponse.items[0]?.sys.id;
+    
+    if (!categoryId) {
+      console.warn(`Category not found for slug: ${categorySlug}`);
       return [];
     }
 
-    const categoryId = categoryResponse.items[0].sys.id;
-
-    // Then, get all blog posts that link to this category
+    // Then get all posts linked to this category
     const response = await client.getEntries<BlogPostFields>({
       content_type: 'blogPost',
-      links_to_entry: categoryId,
+      'fields.categories.sys.id': categoryId,
       order: ['-sys.createdAt'],
-      include: 2
+      include: 2,
+    });
+
+    console.log('Response:', {
+      categoryId,
+      total: response.total,
+      items: response.items.length,
+      firstPost: response.items[0]?.fields.title
     });
 
     return response.items;
   } catch (error) {
-    console.error('Error fetching blog posts:', error);
+    console.error('Error fetching posts by category:', error);
     return [];
   }
 }
 
-export async function getAllPosts() {
+export async function getAllPosts(): Promise<BlogPost[]> {
   try {
     const response = await client.getEntries<BlogPostFields>({
       content_type: 'blogPost',
@@ -90,7 +87,7 @@ export async function getAllPosts() {
   }
 }
 
-export async function getPostBySlug(slug: string) {
+export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
   try {
     const response = await client.getEntries<BlogPostFields>({
       content_type: 'blogPost',
@@ -99,7 +96,7 @@ export async function getPostBySlug(slug: string) {
       include: 2,
     });
 
-    return response.items[0];
+    return response.items[0] || null;
   } catch (error) {
     console.error('Error fetching post by slug:', error);
     return null;

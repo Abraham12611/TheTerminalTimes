@@ -35,7 +35,7 @@ export default async function DistroReviewsPage() {
   }
 
   return (
-    <div className="text-white">
+    <div className="text-white mb-16">
       <h1 className="text-4xl font-bold mb-8">Linux Distro Reviews</h1>
       
       {/* Featured Post - Latest Post */}

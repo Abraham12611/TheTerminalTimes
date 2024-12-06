@@ -43,34 +43,47 @@ export interface BlogPostFields {
 export const client = createClient({
   space: process.env.CONTENTFUL_SPACE_ID!,
   accessToken: process.env.CONTENTFUL_ACCESS_TOKEN!,
+  environment: process.env.CONTENTFUL_ENVIRONMENT || 'master',
 });
 
-export async function getBlogPostsByCategory(categorySlug: string) {
+export interface BlogPost {
+  sys: {
+    id: string;
+  };
+  fields: {
+    title: string;
+    slug: string;
+    excerpt?: string;
+    content: any;
+    publishDate: string;
+    featuredImage?: {
+      fields: {
+        file: {
+          url: string;
+        };
+      };
+    };
+    categories: Array<{
+      fields: {
+        slug: string;
+      };
+    }>;
+  };
+}
+
+export async function getBlogPostsByCategory(categorySlug: string): Promise<BlogPost[]> {
   try {
-    // First, get the category entry
-    const categoryResponse = await client.getEntries({
-      content_type: 'category',
-      'fields.slug': categorySlug,
-      limit: 1
-    });
-
-    if (!categoryResponse.items.length) {
-      return [];
-    }
-
-    const categoryId = categoryResponse.items[0].sys.id;
-
-    // Then, get all blog posts that link to this category
-    const response = await client.getEntries<BlogPostFields>({
+    const response = await client.getEntries({
       content_type: 'blogPost',
-      links_to_entry: categoryId,
-      order: ['-sys.createdAt'],
-      include: 2
+      'fields.categories.sys.contentType.sys.id': 'category',
+      'fields.categories.fields.slug': categorySlug,
+      order: '-fields.publishDate', // Sort by publish date descending
+      include: 2, // Include linked entries (like categories and authors)
     });
 
-    return response.items;
+    return response.items as BlogPost[];
   } catch (error) {
-    console.error('Error fetching blog posts:', error);
+    console.error('Error fetching blog posts by category:', error);
     return [];
   }
 }

@@ -1,25 +1,27 @@
 import React from 'react';
-import { getBlogPostsByCategory } from '@/lib/contentful';
+import { getBlogPostsByCategory, BlogPost } from '@/lib/contentful';
 import Image from 'next/image';
 import Link from 'next/link';
 import { format } from 'date-fns';
 
 export const metadata = {
-  title: 'Linux Tips & Tricks | The Terminal Times',
-  description: 'Discover useful Linux tips and tricks to enhance your productivity and system performance.',
+  title: 'Linux Distro Reviews | The Terminal Times',
+  description: 'In-depth reviews of various Linux distributions.',
 };
 
-export default async function TipsAndTricksPage() {
+export const revalidate = 60; // Revalidate page every 60 seconds
+
+export default async function DistroReviewsPage() {
   const posts = await getBlogPostsByCategory('distro-reviews');
 
   return (
     <div className="text-white">
       <h1 className="text-4xl font-bold mb-8">Linux Distro Reviews</h1>
       
-      {/* Featured Tip - First Post */}
+      {/* Featured Post - Latest Post */}
       {posts.length > 0 && (
         <div className="bg-gray-900 rounded-lg p-8 mb-12 border border-gray-800">
-          <span className="text-green-500 text-sm">Featured Tip</span>
+          <span className="text-green-500 text-sm">Featured Review</span>
           <h2 className="text-2xl font-bold mt-2 mb-4">{posts[0].fields.title}</h2>
           <p className="text-gray-400 mb-6">{posts[0].fields.excerpt}</p>
           <Link 
@@ -31,9 +33,9 @@ export default async function TipsAndTricksPage() {
         </div>
       )}
       
-      {/* Tips Grid - Remaining Posts */}
+      {/* Reviews Grid - Remaining Posts */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {posts.slice(1).map((post) => (
+        {posts.slice(1).map((post: BlogPost) => (
           <div key={post.sys.id} className="bg-gray-900 rounded-lg p-6 border border-gray-800">
             {post.fields.featuredImage && (
               <div className="relative w-full h-48 mb-4">

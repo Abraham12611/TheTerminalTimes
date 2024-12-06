@@ -5,6 +5,7 @@ import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 import { BLOCKS } from '@contentful/rich-text-types';
 import { Entry, Asset } from 'contentful';
 import { FaTwitter, FaFacebook, FaLinkedin, FaReddit, FaMastodon, FaInstagram } from 'react-icons/fa';
+import RandomPosts from '@/components/RandomPosts';
 
 // Define interfaces for your content types
 interface Author {
@@ -158,47 +159,58 @@ export default async function BlogPost({ params }: { params: { slug: string } })
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12 text-white">
-      <h1 className="text-5xl font-bold mb-4">{post.fields.title}</h1>
-      
-      {/* Update the SocialShareButtons to use absolute URL */}
-      <SocialShareButtons 
-        title={post.fields.title} 
-        url={`${process.env.NEXT_PUBLIC_BASE_URL}/posts/${params.slug}`}
-      />
-
-      <div className="flex items-center space-x-4 mb-8 text-gray-400">
-        <div className="flex items-center">
-          {post.fields.author?.fields?.profilePicture && (
-            <Image
-              src={`https:${post.fields.author.fields.profilePicture.fields.file.url}`}
-              alt={post.fields.author.fields.name}
-              width={40}
-              height={40}
-              className="rounded-full mr-2"
-            />
-          )}
-          <span>{post.fields.author?.fields?.name}</span>
-        </div>
-        <span>•</span>
-        <time>
-          {format(new Date(post.fields.publishDate || Date.now()), 'MMMM d, yyyy')}
-        </time>
-      </div>
-      
-      {post.fields.featuredImage && (
-        <div className="relative w-full h-96 mb-8">
-          <Image
-            src={`https:${post.fields.featuredImage.fields.file.url}`}
-            alt={post.fields.title || 'Featured image'}
-            fill
-            className="rounded-lg object-cover"
+    <div className="max-w-7xl mx-auto px-4 py-12">
+      <div className="flex flex-col lg:flex-row gap-8">
+        {/* Main content */}
+        <div className="lg:w-2/3">
+          <h1 className="text-5xl font-bold mb-4">{post.fields.title}</h1>
+          
+          <SocialShareButtons 
+            title={post.fields.title} 
+            url={`${process.env.NEXT_PUBLIC_BASE_URL}/posts/${params.slug}`}
           />
+
+          <div className="flex items-center space-x-4 mb-8 text-gray-400">
+            <div className="flex items-center">
+              {post.fields.author?.fields?.profilePicture && (
+                <Image
+                  src={`https:${post.fields.author.fields.profilePicture.fields.file.url}`}
+                  alt={post.fields.author.fields.name}
+                  width={40}
+                  height={40}
+                  className="rounded-full mr-2"
+                />
+              )}
+              <span>{post.fields.author?.fields?.name}</span>
+            </div>
+            <span>•</span>
+            <time>
+              {format(new Date(post.fields.publishDate || Date.now()), 'MMMM d, yyyy')}
+            </time>
+          </div>
+          
+          {post.fields.featuredImage && (
+            <div className="relative w-full h-96 mb-8">
+              <Image
+                src={`https:${post.fields.featuredImage.fields.file.url}`}
+                alt={post.fields.title || 'Featured image'}
+                fill
+                className="rounded-lg object-cover"
+              />
+            </div>
+          )}
+          
+          <div className="prose prose-invert max-w-none">
+            {documentToReactComponents(post.fields.content, renderOptions)}
+          </div>
         </div>
-      )}
-      
-      <div className="prose prose-invert max-w-none">
-        {documentToReactComponents(post.fields.content, renderOptions)}
+
+        {/* Sidebar */}
+        <div className="lg:w-1/3">
+          <div className="sticky top-8">
+            <RandomPosts currentSlug={params.slug} />
+          </div>
+        </div>
       </div>
     </div>
   );

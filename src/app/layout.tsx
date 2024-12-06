@@ -19,6 +19,14 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: 'The Terminal Times - Linux Blog',
   description: 'Your source for Linux tutorials, distro reviews, and command-line tips',
+  icons: {
+    icon: [
+      {
+        url: '/terminal.svg',
+        href: '/terminal.svg',
+      },
+    ],
+  },
 };
 
 export default function RootLayout({

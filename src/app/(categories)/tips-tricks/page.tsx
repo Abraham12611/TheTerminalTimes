@@ -32,7 +32,7 @@ export default async function TipsAndTricksPage() {
       )}
       
       {/* Tips Grid - Remaining Posts */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
         {posts.slice(1).map((post) => (
           <div key={post.sys.id} className="bg-gray-900 rounded-lg p-6 border border-gray-800">
             {post.fields.featuredImage && (

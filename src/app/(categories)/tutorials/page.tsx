@@ -35,7 +35,7 @@ export default async function TutorialsPage() {
       )}
       
       {/* Tutorials Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
         {posts.slice(1).map((post) => (
           <Link 
             key={post.sys.id} 

@@ -31,8 +31,8 @@ export default async function DistroReviewsPage() {
       {posts.length > 0 && (
         <div className="bg-gray-900 rounded-lg p-8 mb-12 border border-gray-800">
           <span className="text-green-500 text-sm">Featured Review</span>
-          <h2 className="text-2xl font-bold mt-2 mb-4">{posts[0].fields.title}</h2>
-          <p className="text-gray-400 mb-6">{posts[0].fields.excerpt}</p>
+          <h2 className="text-2xl font-bold mt-2 mb-4">{posts[0].fields.title || ''}</h2>
+          <p className="text-gray-400 mb-6">{posts[0].fields.excerpt || ''}</p>
           <Link 
             href={`/posts/${posts[0].fields.slug}`}
             className="bg-green-500 text-white px-6 py-2 rounded-full hover:bg-green-600 transition-colors inline-block"
@@ -51,15 +51,15 @@ export default async function DistroReviewsPage() {
                 <div className="relative w-full h-48 mb-4">
                   <Image
                     src={`https:${post.fields.featuredImage.fields.file.url}`}
-                    alt={post.fields.title}
+                    alt={post.fields.title || ''}
                     fill
                     className="rounded-lg object-cover"
                   />
                 </div>
               )}
               <span className="text-green-500 text-sm">Distro Review</span>
-              <h3 className="text-xl font-bold mt-2 mb-2">{post.fields.title}</h3>
-              <p className="text-gray-400 mb-4">{post.fields.excerpt}</p>
+              <h3 className="text-xl font-bold mt-2 mb-2">{post.fields.title || ''}</h3>
+              <p className="text-gray-400 mb-4">{post.fields.excerpt || ''}</p>
               <div className="flex justify-between items-center">
                 <Link 
                   href={`/posts/${post.fields.slug}`}

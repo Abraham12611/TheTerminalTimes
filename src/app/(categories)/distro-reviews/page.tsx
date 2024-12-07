@@ -57,7 +57,7 @@ export default async function DistroReviewsPage() {
         </div>
       )}
       
-      {/* Reviews Grid - Remaining Posts */}
+      {/* Reviews Grid - Remaining Pots */}
       {posts.length > 1 && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
           {posts.slice(1).map((post) => (
